@@ -1,0 +1,150 @@
+
+
+<!-- <html>
+  <img src="{{content['atr']}}" width="100" height="100">
+  <p> Login: {{content['login']}}</p>
+  <p> Id: {{content['id']}}</p>
+  <p> Name: {{content['name']}}</p>
+  <p> Followers: {{content['followers']}}</p>
+  <p> Bio: {{content['bio']}}</p>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="static/css/style.css">
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'Monday');
+      data.addColumn('number', 'Commits');
+      data.addRows({{vals[0]}});
+
+      var data1 = new google.visualization.DataTable();
+      data1.addColumn('number', 'Tuesday');
+      data1.addColumn('number', 'Commits');
+      data1.addRows({{vals[1]}});
+
+      var data2 = new google.visualization.DataTable();
+      data2.addColumn('number', 'Wednesday');
+      data2.addColumn('number', 'Commits');
+      data2.addRows({{vals[2]}});
+
+      var data3 = new google.visualization.DataTable();
+      data3.addColumn('number', 'Thursday');
+      data3.addColumn('number', 'Commits');
+      data3.addRows({{vals[3]}});
+
+      var data4 = new google.visualization.DataTable();
+      data4.addColumn('number', 'Friday');
+      data4.addColumn('number', 'Commits');
+      data4.addRows({{vals[4]}});
+
+      var data5 = new google.visualization.DataTable();
+      data5.addColumn('number', 'Saturday');
+      data5.addColumn('number', 'Commits');
+      data5.addRows({{vals[5]}});
+
+      var data6 = new google.visualization.DataTable();
+      data6.addColumn('number', 'Sunday');
+      data6.addColumn('number', 'Commits');
+      data6.addRows({{vals[6]}});
+
+      var options = {
+        chart: {
+          title: '',
+          subtitle: ''
+        },
+        width: 450,
+        height: 200,
+        legend: { position: 'none' },
+        axes: {
+          x: {
+            0: {side: 'bottom'}
+          }
+        },
+
+      };
+
+      var chart = new google.charts.Line(document.getElementById('g-mon'));
+      chart.draw(data, google.charts.Line.convertOptions(options));
+
+      var chart1 = new google.charts.Line(document.getElementById('g-tue'));
+      chart1.draw(data1, google.charts.Line.convertOptions(options));
+
+      var chart2 = new google.charts.Line(document.getElementById('g-wed'));
+      chart2.draw(data2, google.charts.Line.convertOptions(options));
+
+      var chart3 = new google.charts.Line(document.getElementById('g-thu'));
+      chart3.draw(data3, google.charts.Line.convertOptions(options));
+
+      var chart4 = new google.charts.Line(document.getElementById('g-fri'));
+      chart4.draw(data4, google.charts.Line.convertOptions(options));
+
+      var chart5 = new google.charts.Line(document.getElementById('g-sat'));
+      chart5.draw(data5, google.charts.Line.convertOptions(options));
+
+      var chart6 = new google.charts.Line(document.getElementById('g-sun'));
+      chart6.draw(data6, google.charts.Line.convertOptions(options));
+
+
+    }
+  </script>
+
+
+
+
+  <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var dataPoint = {{ dataPoint | safe }};
+        var data = google.visualization.arrayToDataTable([['Hour','Commit'],dataPoint[0]
+        ]);
+
+        // for (i = 1; i < finalEpNum-5; i++){
+        //   data.addRows([dataPoint[i]]);}
+
+        var options = {
+          title: '',
+          hAxis: {title: '',  titleTextStyle: {color: '#333'}},
+          vAxis: {minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script> -->
+
+</head>
+
+<body>
+  <div id="g-mon"> </div>
+  <div id="g-tue"> </div>
+  <div id="g-wed"> </div>
+  <div id="g-thu"> </div>
+  <div id="g-fri"> </div>
+  <div id="g-sat"> </div>
+  <div id="g-sun"> </div>
+
+  <!-- <div id="chart_div" style="width: 450px; height: 250px;"></div> -->
+
+</body>
+
+</html>
+
+<!--
+<img src="https://avatars3.githubusercontent.com/u/42739046?v=4" width="100" height="100">
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.p" style="width:50%; height:60%;">
+<img src="url" alt="https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.p">
+<img v-bind:src="userData.avatar_url" alt="https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png" class="card-img-top img-fluid">
+-->
