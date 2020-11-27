@@ -8,14 +8,8 @@ from datetime import datetime, date, time, timedelta
 
 # So potential things that can be built:
 
-# 1) Display the users profile pic as well as some basic background information (followers and following)
 # 2) Show all the langauges this user has used
 # 3) Show the times the user commits at
-
-
-
-# Look into creating a random account with to get a token to surpass the rate limit
-
 
 
 
@@ -36,19 +30,8 @@ def my_form_post():
 @app.route('/<inputvalue>')
 def index(inputvalue):
     user_dict = searchForAccount(inputvalue)
-    temp_arr = [[],[],[],[],[],[],[]]
 
-    # Quickly zoom through the list and change certain indexes
-    for i in range(0,7):
-        for key, value in sorted(user_dict['commit'][i].items()):
-            print("Key: ",key," Value: ",value)
-            temp_arr[i].append([key, value])
-
-
-        # Sort the list before
-        print("\n",temp_arr[i],"\n")
-
-    return render_template("dashboard.html", content=user_dict, vals=temp_arr)
+    return render_template("dashboard.html", content=user_dict)
 
 
 def searchForAccount(token):
@@ -73,27 +56,38 @@ def searchForAccount(token):
     user_dict['name'] = user.name
     user_dict['bio'] = user.bio
     user_dict['email'] = user.email
-    user_dict['repos'] = dict()     # The same thing as repo
-    user_dict['commit'] = {0:{}, 1:{}, 2:{}, 3:{}, 4:{}, 5:{}, 6:{}}    # 6 days of the week
+    user_dict['commit'] = {0:[], 1:[], 2:[],3:[],4:[],5:[],6:[]}
 
-    # User repository information
-    for repo in user.get_repos():
-        #user_dict['repos'][repo.name] = dict()
-        repo_total = 0
+    # https://api.github.com/repos/conorlolynch/A-Star-Pathfinding/stats/punch_card
 
-        # For each commit made
-        for com in repo.get_commits():
-            if (user_dict['id'] == com.author.id):
-                date_time = com.commit.author.date
+    repos = user.get_repos()
+    hours_and_commits = repos[0].get_stats_punch_card().raw_data
 
-                hour = date_time.hour
-                day = date_time.weekday()
 
-                # If its in then increment it
-                if (hour in user_dict['commit'][day]):
-                    user_dict['commit'][day][hour] = user_dict['commit'][day][hour] + 1
-                else:
-                    user_dict['commit'][day][hour] = 1
+    # Now convert this into the desired format [hour, num_commits]
+    form = []
+    for index in range(0,len(hours_and_commits)):
+        form.append([index % 24, hours_and_commits[index][2]])
+
+
+    # For each repository in this users account
+    for repo in repos[1:]:
+        if repo.owner.login == user_dict['login']:
+            data = repo.get_stats_punch_card().raw_data
+
+            # For every index in the array
+            for index in range(0,len(form)):
+                form[index][1] = form[index][1] + data[index][2]
+
+
+    # Now store these separetely based on day
+    user_dict['commit'][0] = form[0:24]         # Commit by hour on Sunday
+    user_dict['commit'][1] = form[24:48]        # Commit by hour on Monday
+    user_dict['commit'][2] = form[48:72]        # Commit by hour on Tuesday
+    user_dict['commit'][3] = form[72:96]        # Commit by hour on Wednesday
+    user_dict['commit'][4] = form[96:120]       # Commit by hour on Thursday
+    user_dict['commit'][5] = form[120:144]      # Commit by hour on Friday
+    user_dict['commit'][6] = form[144:]         # Commit by hour on Saturday
 
 
     return user_dict
