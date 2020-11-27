@@ -15,136 +15,137 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="static/css/style.css">
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['line']});
       google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
+    function drawChart(the_values, the_day) {
 
       var data = new google.visualization.DataTable();
-      data.addColumn('number', 'Monday');
-      data.addColumn('number', 'Commits');
-      data.addRows({{vals[0]}});
+      var options = {};
 
-      var data1 = new google.visualization.DataTable();
-      data1.addColumn('number', 'Tuesday');
-      data1.addColumn('number', 'Commits');
-      data1.addRows({{vals[1]}});
+      // This is the default graph that is drawn when the site first loads in
+      if (the_values == null || the_values == undefined){
+        data.addColumn('number', 'Monday');
+        data.addColumn('number', 'Commits');
+        data.addRows({{content['commit'][1]}});
 
-      var data2 = new google.visualization.DataTable();
-      data2.addColumn('number', 'Wednesday');
-      data2.addColumn('number', 'Commits');
-      data2.addRows({{vals[2]}});
+        options = {
+          chart: {
+            title: 'Commits on Monday',
+            subtitle: ''
+          },
+          width: 900,
+          height: 500,
+          legend: { position: 'none' },
+          axes: {
+            x: {
+              0: {side: 'bottom'}
+            }
+          },
 
-      var data3 = new google.visualization.DataTable();
-      data3.addColumn('number', 'Thursday');
-      data3.addColumn('number', 'Commits');
-      data3.addRows({{vals[3]}});
+        };
 
-      var data4 = new google.visualization.DataTable();
-      data4.addColumn('number', 'Friday');
-      data4.addColumn('number', 'Commits');
-      data4.addRows({{vals[4]}});
+      }
+      else {
+        data.addColumn('number', the_day);
+        data.addColumn('number', 'Commits');
+        data.addRows(the_values);
 
-      var data5 = new google.visualization.DataTable();
-      data5.addColumn('number', 'Saturday');
-      data5.addColumn('number', 'Commits');
-      data5.addRows({{vals[5]}});
+        options = {
+          chart: {
+            title: 'Commits on '+the_day,
+            subtitle: ''
+          },
+          width: 900,
+          height: 500,
+          legend: { position: 'none' },
+          axes: {
+            x: {
+              0: {side: 'bottom'}
+            }
+          },
 
-      var data6 = new google.visualization.DataTable();
-      data6.addColumn('number', 'Sunday');
-      data6.addColumn('number', 'Commits');
-      data6.addRows({{vals[6]}});
+        };
+      }
 
-      var options = {
-        chart: {
-          title: '',
-          subtitle: ''
-        },
-        width: 450,
-        height: 200,
-        legend: { position: 'none' },
-        axes: {
-          x: {
-            0: {side: 'bottom'}
-          }
-        },
-
-      };
 
       var chart = new google.charts.Line(document.getElementById('g-mon'));
       chart.draw(data, google.charts.Line.convertOptions(options));
-
-      var chart1 = new google.charts.Line(document.getElementById('g-tue'));
-      chart1.draw(data1, google.charts.Line.convertOptions(options));
-
-      var chart2 = new google.charts.Line(document.getElementById('g-wed'));
-      chart2.draw(data2, google.charts.Line.convertOptions(options));
-
-      var chart3 = new google.charts.Line(document.getElementById('g-thu'));
-      chart3.draw(data3, google.charts.Line.convertOptions(options));
-
-      var chart4 = new google.charts.Line(document.getElementById('g-fri'));
-      chart4.draw(data4, google.charts.Line.convertOptions(options));
-
-      var chart5 = new google.charts.Line(document.getElementById('g-sat'));
-      chart5.draw(data5, google.charts.Line.convertOptions(options));
-
-      var chart6 = new google.charts.Line(document.getElementById('g-sun'));
-      chart6.draw(data6, google.charts.Line.convertOptions(options));
-
-
     }
   </script>
-
-
-
-
-  <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var dataPoint = {{ dataPoint | safe }};
-        var data = google.visualization.arrayToDataTable([['Hour','Commit'],dataPoint[0]
-        ]);
-
-        // for (i = 1; i < finalEpNum-5; i++){
-        //   data.addRows([dataPoint[i]]);}
-
-        var options = {
-          title: '',
-          hAxis: {title: '',  titleTextStyle: {color: '#333'}},
-          vAxis: {minValue: 0}
-        };
-
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    </script> -->
 
 </head>
 
 <body>
-  <div id="g-mon"> </div>
-  <div id="g-tue"> </div>
-  <div id="g-wed"> </div>
-  <div id="g-thu"> </div>
-  <div id="g-fri"> </div>
-  <div id="g-sat"> </div>
-  <div id="g-sun"> </div>
+  <div class="row">
 
-  <!-- <div id="chart_div" style="width: 450px; height: 250px;"></div> -->
+  <!-- User info column -->
+  <div class="col-sm-3">
+
+    <!-- Card containing user information -->
+    <div class="card" style="width: 20rem;">
+          <img class="card-img-top" src="{{content['atr']}}" alt="Card image cap">
+          <div class="card-body">
+
+            <h5 class="card-title">Login</h5>
+            <p class="card-text">{{content['login']}}</p>
+
+            <h5 class="card-title">Bio</h5>
+            <p class="card-text">{{content['bio']}}</p>
+
+            <h5 class="card-title">Location</h5>
+            <p class="card-text">{{content['location']}}</p>
+
+            <p class="card-text">Followers:{{content['followers']}}</p>
+            <p class="card-text">Following:{{content['following']}}</p>
+            <p class="card-text">Repositories:{{content['public_repos']}}</p>
+            <a href="{{content['profile_url']}}" class="card-link"> {{content['login']}} </a>
+          </div>
+        </div>
+
+  </div>
+
+  <!-- Repository commit time information -->
+  <div class="col-sm-6">
+    <div class="card">
+      <h5 class="card-header">{{content['login']}} Commit History</h5>
+      <div class="card-body">
+
+        <!-- Repository drop down button -->
+        <div class="dropdown">
+          <button style ="background-color: #1E88E5; color: white" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Day
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" onchange="changeBodyBg (this)">
+              <a class="dropdown-item" href="javascript:drawChart({{content['commit'][1]}}, 'Monday')">Monday</a>
+              <a class="dropdown-item" href="javascript:drawChart({{content['commit'][2]}}, 'Tuesday')">Tuesday</a>
+              <a class="dropdown-item" href="javascript:drawChart({{content['commit'][3]}}, 'Wednesday')">Wednesday</a>
+              <a class="dropdown-item" href="javascript:drawChart({{content['commit'][4]}}, 'Thursday')">Thursday</a>
+              <a class="dropdown-item" href="javascript:drawChart({{content['commit'][5]}}, 'Friday')">Friday</a>
+              <a class="dropdown-item" href="javascript:drawChart({{content['commit'][6]}}, 'Saturday')">Saturday</a>
+              <a class="dropdown-item" href="javascript:drawChart({{content['commit'][0]}}, 'Sunday')">Sunday</a>
+          </div>
+      </div>
+
+        <p> </p>
+        <!-- Commit History Google Graph-->
+        <div id="g-mon"> </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Language Pie chart column -->
+  <div class="col-sm-3">.col-sm-3</div>
+
 
 </body>
 
 </html>
-
-<!--
-<img src="https://avatars3.githubusercontent.com/u/42739046?v=4" width="100" height="100">
-<img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.p" style="width:50%; height:60%;">
-<img src="url" alt="https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.p">
-<img v-bind:src="userData.avatar_url" alt="https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png" class="card-img-top img-fluid">
--->
