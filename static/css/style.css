@@ -1,32 +1,5 @@
-/* .leftside, .center, .rightside {
-  height: 100vh;
-  width: 100%;
-
-} */
-
-/* ---- */
 
 
-/* --- */
-
-
-
-/* .leftside {
-  height: 100vh;
-  width: 50%;
-  background:red;
-
+html,body {
+  height: 100%;
 }
-
-.center {
-  height: 100vh;
-  width: 100%;
-  background:blue;
-}
-
-
-.rightside {
-  height: 100vh;
-  width: 100%;
-  background:blue;
-} */
