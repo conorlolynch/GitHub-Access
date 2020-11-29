@@ -21,63 +21,68 @@
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['line']});
+      google.charts.load('current', {'packages':['line','corechart']});
+      google.charts.setOnLoadCallback(drawPieChart);
       google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart(the_values, the_day) {
+      function drawChart(the_values, the_day) {
 
-      var data = new google.visualization.DataTable();
-      var options = {};
+        var data = new google.visualization.DataTable();
+        var options = {};
 
-      // This is the default graph that is drawn when the site first loads in
-      if (the_values == null || the_values == undefined){
-        data.addColumn('number', 'Monday');
-        data.addColumn('number', 'Commits');
-        data.addRows({{content['commit'][1]}});
+        // This is the default graph that is drawn when the site first loads in
+        if (the_values == null || the_values == undefined){
+          data.addColumn('number', 'Monday');
+          data.addColumn('number', 'Commits');
+          data.addRows({{content['commit'][1]}});
 
-        options = {
-          chart: {
+          options = {
             title: 'Commits on Monday',
-            subtitle: ''
-          },
-          width: 900,
-          height: 500,
-          legend: { position: 'none' },
-          axes: {
-            x: {
-              0: {side: 'bottom'}
-            }
-          },
+            hAxis: {title: 'Hour', format:'0', textPosition: 'bottom', titleTextStyle: {color: '#333'}},
+            vAxis: {minValue: 0},
+            chartArea:{left:20,top:20,width:"100%",height:"70%"},
+            legend: { position: 'none' },
 
-        };
+          };
 
-      }
-      else {
-        data.addColumn('number', the_day);
-        data.addColumn('number', 'Commits');
-        data.addRows(the_values);
+        }
+        else {
+          data.addColumn('number', the_day);
+          data.addColumn('number', 'Commits');
+          data.addRows(the_values);
 
-        options = {
-          chart: {
+          options = {
             title: 'Commits on '+the_day,
-            subtitle: ''
-          },
-          width: 900,
-          height: 500,
-          legend: { position: 'none' },
-          axes: {
-            x: {
-              0: {side: 'bottom'}
-            }
-          },
+            hAxis: {title: 'Hour', format:'0', titleTextStyle: {color: '#333'}},
+            vAxis: {minValue: 0},
+            chartArea:{left:20,top:20,width:"100%",height:"70%"},
+            legend: { position: 'none' },
 
-        };
+          };
+        }
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        //var chart = new google.charts.Line(document.getElementById('g-mon'));
+        chart.draw(data, google.charts.Line.convertOptions(options));
       }
 
 
-      var chart = new google.charts.Line(document.getElementById('g-mon'));
-      chart.draw(data, google.charts.Line.convertOptions(options));
+    function drawPieChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Task');
+        data.addColumn('number', 'Amount');
+        data.addRows({{content['languages'] | tojson}});
+
+        var options = {
+          title: '',
+          legend: {position:'bottom', maxLines: 10},
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
     }
+
   </script>
 
 </head>
@@ -86,7 +91,7 @@
   <div class="row">
 
   <!-- User info column -->
-  <div class="col-sm-3">
+  <div class="col-sm-2">
 
     <!-- Card containing user information -->
     <div class="card" style="width: 20rem;">
@@ -114,7 +119,7 @@
   <!-- Repository commit time information -->
   <div class="col-sm-6">
     <div class="card">
-      <h5 class="card-header">{{content['login']}} Commit History</h5>
+      <h5 class="card-header">Commit History</h5>
       <div class="card-body">
 
         <!-- Repository drop down button -->
@@ -131,11 +136,13 @@
               <a class="dropdown-item" href="javascript:drawChart({{content['commit'][6]}}, 'Saturday')">Saturday</a>
               <a class="dropdown-item" href="javascript:drawChart({{content['commit'][0]}}, 'Sunday')">Sunday</a>
           </div>
-      </div>
+        </div>
 
+        <!-- Commit History Google Graph -->
+        <!-- <div id="g-mon"> </div> -->
         <p> </p>
-        <!-- Commit History Google Graph-->
-        <div id="g-mon"> </div>
+        <div id="chart_div" style="width: 100%; height: 500px;"></div>
+        <!-- <div id="chart_div"></div> -->
 
       </div>
     </div>
@@ -143,7 +150,16 @@
   </div>
 
   <!-- Language Pie chart column -->
-  <div class="col-sm-3">.col-sm-3</div>
+  <div class="col-sm-4">
+    <p> {{m}}</p>
+    <div class="card">
+      <h5 class="card-header">Language Overview</h5>
+      <div class="card-body">
+        <div id="donutchart" style="width: 500px; height: 500px;"></div>
+      </div>
+    </div>
+
+  </div>
 
 
 </body>
