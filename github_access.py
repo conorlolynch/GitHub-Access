@@ -61,33 +61,62 @@ def searchForAccount(token):
     # https://api.github.com/repos/conorlolynch/A-Star-Pathfinding/stats/punch_card
 
     repos = user.get_repos()
-    hours_and_commits = repos[0].get_stats_punch_card().raw_data
+
+    # Make sure the user actually has repositories (looking at you Jeremeie)
+    if repos != None:
+        hours_and_commits = repos[0].get_stats_punch_card().raw_data
 
 
-    # Now convert this into the desired format [hour, num_commits]
-    form = []
-    for index in range(0,len(hours_and_commits)):
-        form.append([index % 24, hours_and_commits[index][2]])
+        # Now convert this into the desired format [hour, num_commits]
+        form = []
+        for index in range(0,len(hours_and_commits)):
+            form.append([index % 24, hours_and_commits[index][2]])
 
 
-    # For each repository in this users account
-    for repo in repos[1:]:
-        if repo.owner.login == user_dict['login']:
-            data = repo.get_stats_punch_card().raw_data
-
-            # For every index in the array
-            for index in range(0,len(form)):
-                form[index][1] = form[index][1] + data[index][2]
+        print("Number of repositories: ",repos.totalCount)
 
 
-    # Now store these separetely based on day
-    user_dict['commit'][0] = form[0:24]         # Commit by hour on Sunday
-    user_dict['commit'][1] = form[24:48]        # Commit by hour on Monday
-    user_dict['commit'][2] = form[48:72]        # Commit by hour on Tuesday
-    user_dict['commit'][3] = form[72:96]        # Commit by hour on Wednesday
-    user_dict['commit'][4] = form[96:120]       # Commit by hour on Thursday
-    user_dict['commit'][5] = form[120:144]      # Commit by hour on Friday
-    user_dict['commit'][6] = form[144:]         # Commit by hour on Saturday
+
+        # Make sure they have more than one repository
+        if (repos.totalCount > 1):
+
+            # For each repository in this users account
+            for repo in repos[1:]:
+
+                # Make sure the repo isnt private
+                if (not repo.private):
+                    if repo.owner.login == user_dict['login']:
+                        try:
+                            data = repo.get_stats_punch_card().raw_data
+
+                            # For every index in the array
+                            for index in range(0,len(form)):
+                                form[index][1] = form[index][1] + data[index][2]
+                        except Exception as e:
+                            pass
+
+
+
+        # Now store these separetely based on day
+        user_dict['commit'][0] = form[0:24]         # Commit by hour on Sunday
+        user_dict['commit'][1] = form[24:48]        # Commit by hour on Monday
+        user_dict['commit'][2] = form[48:72]        # Commit by hour on Tuesday
+        user_dict['commit'][3] = form[72:96]        # Commit by hour on Wednesday
+        user_dict['commit'][4] = form[96:120]       # Commit by hour on Thursday
+        user_dict['commit'][5] = form[120:144]      # Commit by hour on Friday
+        user_dict['commit'][6] = form[144:]         # Commit by hour on Saturday
+
+    else:
+        template = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0],
+                   [12, 0], [13, 0], [14, 0], [15, 0], [16, 0], [17, 0], [18, 0], [19, 0], [20, 0], [21, 0], [22, 0], [23, 0]]
+
+        user_dict['commit'][0] = template
+        user_dict['commit'][1] = template
+        user_dict['commit'][2] = template
+        user_dict['commit'][3] = template
+        user_dict['commit'][4] = template
+        user_dict['commit'][5] = template
+        user_dict['commit'][6] = template
 
 
     return user_dict
