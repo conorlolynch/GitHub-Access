@@ -1,7 +1,7 @@
 import json
 import requests
 from github import Github
-from flask import Flask, request, render_template, redirect, url_for,jsonify
+from flask import Flask, request, render_template, redirect, url_for, jsonify, flash
 import time
 from datetime import datetime, date, time, timedelta
 
@@ -20,14 +20,25 @@ def home():
 @app.route("/", methods=['POST'])
 def my_form_post():
     user_or_token = request.form['b1']
-    print(user_or_token)
-    return redirect(url_for('index', inputvalue=user_or_token)) # then you can pass email or pass
+    error = None
+
+    try:
+        g = Github(login_or_token=user_or_token)
+        user = g.get_user()
+        login = user.login
+
+        return redirect(url_for('index',inputvalue=user_or_token))
+
+    except:
+        error = "Invalid Token"
+
+    return render_template('index.html', error=error)
+
 
 
 @app.route('/<inputvalue>')
 def index(inputvalue):
     user_dict = searchForAccount(inputvalue)
-
     return render_template("dashboard.html", content=user_dict)
 
 
@@ -148,7 +159,6 @@ def searchForAccount(token):
     user_dict['languages'] = []
     user_dict['commit'] = {0:[], 1:[], 2:[],3:[],4:[],5:[],6:[]}
 
-    # https://api.github.com/repos/conorlolynch/A-Star-Pathfinding/stats/punch_card
 
     repos = user.get_repos()
 
