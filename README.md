@@ -7,11 +7,12 @@ This project was created using the flask web framework along with the [pygithub]
 To get started just clone the repository and run the github_access.py file. This will create a flask instance and generate a local host for the website that can be opened up on a web browser. 
 
 ### Prerequisites
-
+Run the code with Python 3.5+
 Following modules are required to run this program:
 
 ```
-... ...
+Flask==1.1.2
+PyGithub==1.53
 ```
 
 
