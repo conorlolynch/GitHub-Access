@@ -22,6 +22,8 @@ This website requires a valid github token for an existing account to be provide
 ![alt text](images/scope-1.PNG)
 ![alt text](images/scope-2.PNG)
 
+When a valid token is provided the pygithub api will authenticate the token and query data from the users account such as basic user information, the times that commits are made in each repository and the programming languages committed by the user. All of this is then visualized on the website through various bar and pie charts 
+
 ## Demonstration
 
 ![alt text](images/website-footage.gif)
