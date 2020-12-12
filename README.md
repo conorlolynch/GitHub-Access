@@ -17,7 +17,9 @@ PyGithub==1.53
 
 ## Usage and Explanation
 
-To be added
+This website requires a valid github token for an existing account to be provided. To ensure that the required data is gathered when querying with said token make sure cetain scopes for the token are ticked off such as the following:
+
+![alt text](images/scope-1.png)
 
 ## Demonstration
 
