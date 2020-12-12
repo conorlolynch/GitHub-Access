@@ -107,9 +107,10 @@
             <h5 class="card-title">Location</h5>
             <p class="card-text">{{content['location']}}</p>
 
-            <p class="card-text">Followers:{{content['followers']}}</p>
-            <p class="card-text">Following:{{content['following']}}</p>
-            <p class="card-text">Repositories:{{content['public_repos']}}</p>
+            <p class="card-text">Followers: {{content['followers']}}</p> 
+            <p class="card-text">Following: {{content['following']}}</p>
+            <p class="card-text">Repositories: {{content['public_repos']}}</p>
+
             <a href="{{content['profile_url']}}" class="card-link"> {{content['login']}} </a>
           </div>
         </div>
@@ -151,7 +152,6 @@
 
   <!-- Language Pie chart column -->
   <div class="col-sm-4">
-    <p> {{m}}</p>
     <div class="card">
       <h5 class="card-header">Language Overview</h5>
       <div class="card-body">
