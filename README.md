@@ -3,7 +3,7 @@ Project to query the GitHub API and visualize interesting data from it.
 
 ## Getting Started
 
-This project was created using the flask web framework along with the [pygithub](https://pygithub.readthedocs.io/en/latest/introduction.html#projects-using-pygithub) library for python. 
+This project was created using the flask web framework along with the [pygithub](https://pygithub.readthedocs.io/en/latest/introduction.html) library for python. 
 To get started just clone the repository and run the github_access.py file. This will create a flask instance and generate a local host for the website that can be opened up on a web browser. 
 
 ### Prerequisites
